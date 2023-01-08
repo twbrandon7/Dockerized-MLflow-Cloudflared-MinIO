@@ -19,7 +19,7 @@ services:
     command: server /minio/storage --console-address ":9001"
   
   mlflow:
-    image: "ghcr.io/mlflow/mlflow:v2.1.1"
+    build: ./mlflow
     restart: always
     depends_on: 
       - minio
