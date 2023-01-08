@@ -7,7 +7,7 @@
     git clone https://github.com/twbrandon7/Dockerized-MLflow-cloudflared-MinIO
     cd Dockerized-MLflow-Cloudflared-MinIO
     ```
-2. Create a .htpasswd file for the authentication of MLflow.
+2. Create a `.htpasswd` file for the authentication of MLflow.
     ```bash
     # Create the password for user `admin`.
     # The username and password will stored in `./nginx/.htpasswd`.
