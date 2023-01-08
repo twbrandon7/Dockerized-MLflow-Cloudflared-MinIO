@@ -20,6 +20,7 @@ services:
   
   mlflow:
     image: "ghcr.io/mlflow/mlflow:v2.1.1"
+    restart: unless-stopped
     depends_on: 
       - minio
     volumes: 
@@ -32,8 +33,8 @@ services:
 
   tunnel:
     container_name: cloudflared-tunnel
-    image: cloudflare/cloudflared
     restart: unless-stopped
+    image: cloudflare/cloudflared
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
