@@ -31,6 +31,21 @@ services:
       - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
     command: mlflow server --backend-store-uri /mlflow --host 0.0.0.0 --port 5500 --default-artifact-root s3://${MLFLOW_S3_BUCKET_MAME}/
 
+  prefect:
+    build: ./prefect
+    restart: always
+    depends_on:
+      - minio
+    volumes: 
+      - ./prefect/setup.py:/opt/prefect/setup.py
+      - ${PREFECT_STORAGE_PATH}:/root/.prefect/
+    environment:
+      - S3_ENDPOINT_URL=http://minio:9000
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_BUCKET_NAME=${PREFECT_S3_BUCKET_MAME}
+    command: bash -c 'python3 /root/setup.py && prefect orion start --host 0.0.0.0'
+
   tunnel:
     container_name: cloudflared-tunnel
     restart: always
