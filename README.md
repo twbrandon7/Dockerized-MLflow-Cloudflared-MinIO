@@ -12,7 +12,7 @@
     cloudflared service install <token>
     ```
     Copy the token, and it will be used later.
-3. In Cloudflare Zero Trust Dashboard, configure `Public Hostname` of the tunnel. Add a `Public Hostname Page` and set `Service` to `http://nginx:80`.
+3. In Cloudflare Zero Trust Dashboard, configure `Public Hostname` of the tunnel. Add a `Public Hostname Page` and set `Service` to `http://middleware:8000`.
     ![cloudflare-setting.png](./doc-images/cloudflare-setting.png)
 4. Create a file called `.env` in the same directory as `README.md`. Several variables should be set in the `.env` file:
     - `TUNNEL_TOKEN`: The token created in step 2.
