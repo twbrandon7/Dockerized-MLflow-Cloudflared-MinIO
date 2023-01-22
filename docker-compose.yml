@@ -7,6 +7,8 @@ services:
       MLFLOW_HOST: mlflow
       MLFLOW_PORT: 5500
       MLFLOW_API_ACCESS_TOKEN: ${MLFLOW_API_ACCESS_TOKEN}
+    networks:
+      - mlops-network
 
   minio:
     image: minio/minio:RELEASE.2023-01-06T18-11-18Z.fips
@@ -18,6 +20,8 @@ services:
       MINIO_ACCESS_KEY: "${MINIO_ACCESS_KEY}"
       MINIO_SECRET_KEY: "${MINIO_SECRET_KEY}"
     command: server /minio/storage --console-address ":9001"
+    networks:
+      - mlops-network
   
   mlflow:
     build: ./mlflow
@@ -31,11 +35,19 @@ services:
       - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
       - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
     command: mlflow server --backend-store-uri /mlflow --host 0.0.0.0 --port 5500 --default-artifact-root s3://${MLFLOW_S3_BUCKET_MAME}/
+    networks:
+      - mlops-network
 
   tunnel:
     container_name: cloudflared-tunnel
     restart: always
-    image: cloudflare/cloudflared
+    build: ./tunnel
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    networks:
+      - mlops-network
+
+networks:
+  mlops-network:
+    name: mlops-network
